@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const jsend = require('jsend');
+const {join} = require('path')
 const productRouter = require('./routes/product_router')
 const categoryRouter = require('./routes/category_router')
 const userRouter = require('./routes/user_router')
@@ -18,6 +19,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 app.use(jsend.middleware)
 app.use(express.json())
+app.use('/uploads',express.static(join(__dirname,'uploads')))
 
 app.use('/api/categories', categoryRouter)
 app.use('/api/products', productRouter)
