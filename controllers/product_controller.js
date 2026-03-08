@@ -17,24 +17,42 @@ const addProduct = errorCatcher(async(req,res,next)=>{
     res.status(201).jsend.success({product})
 })
 
+
 const getProductById = async function (req,res){
     const product = await Product.findById(req.params.productId)
     res.jsend.success({product})
 }
+
+
 const getProducts = async function (req,res){
     const paginating = pagination(req)
-    const products = await Product.find().skip(paginating.skip).limit(paginating.limit)
+    const { q } = req.query;
+    let products
+    if(q){
+     products = await Product.find({ name: { $regex: q, $options: 'i' } }
+     
+    ).skip(paginating.skip).limit(paginating.limit)
+
+    }else{
+     products = await Product.find().skip(paginating.skip).limit(paginating.limit)
+
+    }
     res.jsend.success({products})
 }
+
+
 const updateProduct = async function (req,res){
     const {stock , ...rest} = req.body
     await Product.findByIdAndUpdate(req.params.productId,{$set:rest , $inc:{stock}})
     res.jsend.success('Done!')
 }
+
+
 const removeProduct = async function (req,res){
     await Product.findByIdAndDelete(req.params.productId)
     res.jsend.success('Done!')
 }
+
 
 module.exports = {
     getProducts,

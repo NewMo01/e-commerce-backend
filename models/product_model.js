@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema(
       minlength: [2, "too short name"],
     },
     catId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       required: [true, "required field"],
       ref: "Category",
     },
@@ -65,5 +65,6 @@ const productSchema = new mongoose.Schema(
     },
   },
 );
+
 
 module.exports = mongoose.model("Product", productSchema);
