@@ -5,7 +5,7 @@ const AppError = require('../helpers/app_error');
 
 module.exports = async(req, res, next) => {
 
-    if(!req.headers.authorization){
+    if(!(req.headers.authorization)){
         return next(AppError.create('Authorization token is required',401))
     }
     const token = req.headers.authorization.split(' ')[1]

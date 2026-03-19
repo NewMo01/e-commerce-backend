@@ -21,7 +21,7 @@ const registerUser = errorCatcher(async function (req, res, next) {
     }
   
   const hashedPass = await bcrypt.hash(password, 10);
-  const newUser = await User.insertOne({ ...req.body, password: hashedPass });
+  const newUser = await User.create({ ...req.body, password: hashedPass });
   const token = tokenGenerator({ id: newUser._id ,role:newUser.role});
   res.status(201).jsend.success({ user: newUser, token });
 });
@@ -58,10 +58,10 @@ const getUsers = async function(req,res,next){
   res.jsend.success({users})
 }
 
-const updateUser = async function (req,res){
-      await User.updateOne({_id:req.params.id},req.body)
+const updateUser = errorCatcher(async function (req,res,next){
+      await User.updateOne({_id:req.params.id},req.body,{runValidators:true})
       res.jsend.success({res:'Done!'})
-}
+})
 
 const removeUser = async function (req,res){
     await User.deleteOne({_id:req.params.id})

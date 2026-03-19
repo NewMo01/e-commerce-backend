@@ -1,9 +1,11 @@
 
 require('dotenv').config() 
+const cors = require('cors')
 const express = require('express');
 const mongoose = require('mongoose');
 const jsend = require('jsend');
 const {join} = require('path')
+const normalizeInput = require('./middlewares/normalize_input')
 const productRouter = require('./routes/product_router')
 const categoryRouter = require('./routes/category_router')
 const userRouter = require('./routes/user_router')
@@ -14,12 +16,13 @@ mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('Connection error:', err));
 
-//create schema -> create model -> use it
 
 
+app.use(cors())
 app.use(jsend.middleware)
 app.use(express.json())
 app.use('/uploads',express.static(join(__dirname,'uploads')))
+app.use(normalizeInput)
 
 app.use('/api/categories', categoryRouter)
 app.use('/api/products', productRouter)
@@ -40,5 +43,5 @@ app.all(/.*/, (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-    console.log('Server is running on port 3000');
+    console.log('Server is running on port:',process.env.PORT);
 })

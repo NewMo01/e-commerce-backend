@@ -21,7 +21,7 @@ const createOrder = errorCatcher(async (req, res, next) => {
     });
   }
 
-  const order = await Order.insertOne(req.body);
+  const order = await Order.create(req.body);
 
   res.status(201).jsend.success({ order });
 });

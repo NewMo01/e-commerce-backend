@@ -1,19 +1,23 @@
 
-//CRUD
-
 const AppError = require('../helpers/app_error')
 const errorCatcher = require('../helpers/error_catcher')
 const {pagination} = require('../helpers/find_queries')
+const {deleteFile,deleteFiles} = require('../helpers/delete_files')
 const Product = require('../models/product_model')
 
 const addProduct = errorCatcher(async(req,res,next)=>{
+    const preview = req.files['previewImg'][0].filename
+    const imgs = req.files['imgs'].map(file=>file.filename)
+
     const {name} = req.body
     const oldProduct = await Product.findOne({name})
     if(oldProduct){
+        deleteFile(preview)
+        deleteFiles(imgs)
         return next(AppError.create("fail", 400, { message: "Product already exists" }))
     }
     
-    const product = await Product.insertOne(req.body)
+    const product = await Product.create({...req.body,previewImg:preview,imgs})
     res.status(201).jsend.success({product})
 })
 
