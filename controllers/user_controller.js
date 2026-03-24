@@ -58,10 +58,14 @@ const getUsers = async function(req,res,next){
   res.jsend.success({users})
 }
 
-const updateUser = errorCatcher(async function (req,res,next){
-      await User.updateOne({_id:req.params.id},req.body,{runValidators:true})
-      res.jsend.success({res:'Done!'})
-})
+const updateUser = errorCatcher(async function (req, res, next) {
+  const {password} = req.body
+  const hashedPass = await bcrypt.hash(password, 10);
+  await User.updateOne({ _id: req.params.id }, {...req.body,password:hashedPass}, {
+    runValidators: true,
+  });
+  res.jsend.success({ res: "Done!" });
+});
 
 const removeUser = async function (req,res){
     await User.deleteOne({_id:req.params.id})
