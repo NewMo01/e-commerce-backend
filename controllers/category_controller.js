@@ -16,11 +16,11 @@ const addCategory = errorCatcher(async (req, res, next) => {
     );
   }
 
-  const product = await Category.create({
+  const category = await Category.create({
     ...req.body,
     image: req.file.filename,
   });
-  res.status(201).jsend.success({ product });
+  res.status(201).jsend.success({ category });
 });
 
 const getCategories = async (req, res) => {

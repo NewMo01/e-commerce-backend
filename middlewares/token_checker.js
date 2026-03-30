@@ -10,6 +10,7 @@ module.exports = async(req, res, next) => {
     }
     const token = req.headers.authorization.split(' ')[1]
 
+
     const decoded = await jwt.verify(token, process.env.SECRET_KEY);
     if(!decoded){
         return next(AppError.create('fail',400,{message:'invalid token'}))
