@@ -15,7 +15,7 @@ router.route('/')
     .post(tokenChecker,roleChecker(constants.MANAGER),upload.single('image'),controller.addCategory)
 router.route('/:catId')
     .get(controller.getCategory)
-    .patch(tokenChecker,roleChecker(constants.MANAGER),controller.updateCategory)
+    .patch(tokenChecker,roleChecker(constants.MANAGER),upload.single('image'),controller.updateCategory)
     .delete(tokenChecker,roleChecker(constants.MANAGER),controller.removeCategory)
 
 

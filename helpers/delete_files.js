@@ -20,6 +20,7 @@ function deleteFiles(filePaths) {
 }
 
 function deleteFile(filePath) {
+  if(!filePath) return
   fs.unlink(join('uploads',filePath), (err) => {
     if (err) {
       console.error("Error deleting file:", err);
