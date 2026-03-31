@@ -35,9 +35,12 @@ const getCategory = async (req, res) => {
   res.jsend.success({ category });
 };
 const updateCategory = async (req, res) => {
-  const oldCategory =   await Category.findByIdAndUpdate(req.params.catId, { $set: { ...req.body,
-    image: req.file.filename} });
-    deleteFile(oldCategory.image)
+  const oldCategory = await Category.findById(req.params.catId);
+  await Category.findByIdAndUpdate(req.params.catId, { $set: { ...req.body,
+  image: req.file?req.file.filename : oldCategory.image} });
+  if(req.file){
+  deleteFile(oldCategory.image)
+}
    
   res.jsend.success({ res: "Done!" });
 };

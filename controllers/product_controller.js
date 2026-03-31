@@ -47,13 +47,19 @@ const getProducts = async function (req,res){
 
 const updateProduct = async function (req,res){
     const {stock , ...rest} = req.body
-    await Product.findByIdAndUpdate(req.params.productId,{$set:rest , $inc:{stock}})
+    const previewImg = req.files['previewImg'][0].filename
+    const imgs = req.files['imgs'].map(file=>file.filename)
+    const oldProduct = await Product.findByIdAndUpdate(req.params.productId,{$set:{...rest, previewImg, imgs} , $inc:{stock}})
+    deleteFile(oldProduct.previewImg)
+    deleteFiles(oldProduct.imgs)
     res.jsend.success('Done!')
 }
 
 
 const removeProduct = async function (req,res){
-    await Product.findByIdAndDelete(req.params.productId)
+    const product = await Product.findByIdAndDelete(req.params.productId)
+    deleteFile(product.previewImg)
+    deleteFiles(product.imgs)
     res.jsend.success('Done!')
 }
 

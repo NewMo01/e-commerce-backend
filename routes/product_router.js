@@ -26,6 +26,10 @@ router
   .patch(
     tokenChecker,
     roleChecker(constants.MANAGER, constants.ADMIN),
+    upload.fields([
+      { name: "previewImg", maxCount: 1 },
+      { name: "imgs", maxCount: 4 },
+    ]),
     controller.updateProduct,
   )
   .delete(
