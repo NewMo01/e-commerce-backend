@@ -18,7 +18,7 @@ const addCategory = errorCatcher(async (req, res, next) => {
 
   const category = await Category.create({
     ...req.body,
-    image: req.file.filename,
+    image: req.file ? req.file.filename : null,
   });
   res.status(201).jsend.success({ category });
 });
@@ -35,11 +35,16 @@ const getCategory = async (req, res) => {
   res.jsend.success({ category });
 };
 const updateCategory = async (req, res) => {
-  await Category.findByIdAndUpdate(req.params.catId, { $set: req.body });
+  const oldCategory =   await Category.findByIdAndUpdate(req.params.catId, { $set: { ...req.body,
+    image: req.file.filename} });
+    deleteFile(oldCategory.image)
+   
   res.jsend.success({ res: "Done!" });
 };
 const removeCategory = async (req, res) => {
-  await Category.findByIdAndDelete(req.params.catId);
+   const oldCategory = await Category.findByIdAndDelete(req.params.catId);
+     deleteFile(oldCategory.image)
+
   res.jsend.success({ res: "Done!" });
 };
 
