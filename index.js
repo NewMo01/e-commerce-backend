@@ -14,7 +14,7 @@ const orderRouter = require('./routes/order_router')
 const app = express()
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('Connection error:', err));
+  .catch(err => console.error('Connection error:', err.message));
 
 
 
@@ -33,7 +33,7 @@ app.use((err,req,res,next)=>{
     if(err.message=='fail'){
         res.status(err.code||404).jsend.fail(err.data)
     }else{
-        res.status(err.code||500).jsend.error(err.message)
+        res.status(500).jsend.error(err.message)
     }
 })
 
