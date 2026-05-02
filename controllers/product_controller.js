@@ -4,10 +4,11 @@ const errorCatcher = require('../helpers/error_catcher')
 const {pagination} = require('../helpers/find_queries')
 const {deleteFile,deleteFiles} = require('../helpers/delete_files')
 const Product = require('../models/product_model')
+const Category = require('../models/category_model')
 
 const addProduct = errorCatcher(async(req,res,next)=>{
-    const preview = req.files['previewImg'][0].filename
-    const imgs = req.files['imgs'].map(file=>file.filename)
+    const preview = req.files? req.files['previewImg'][0].filename: null
+    const imgs = req.files? req.files['imgs'].map(file=>file.filename): []
 
     const {name} = req.body
     const oldProduct = await Product.findOne({name})
@@ -18,6 +19,7 @@ const addProduct = errorCatcher(async(req,res,next)=>{
     }
     
     const product = await Product.create({...req.body,previewImg:preview,imgs})
+    await Category.findByIdAndUpdate(req.body.catId,{$push:{products:product._id}})
     res.status(201).jsend.success({product})
 })
 
@@ -60,6 +62,7 @@ const removeProduct = async function (req,res){
     const product = await Product.findByIdAndDelete(req.params.productId)
     deleteFile(product.previewImg)
     deleteFiles(product.imgs)
+    await Category.findByIdAndUpdate(product.catId,{$pull:{products:product._id}}) // remove product from category
     res.jsend.success('Done!')
 }
 
