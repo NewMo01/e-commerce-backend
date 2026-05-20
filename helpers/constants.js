@@ -5,10 +5,11 @@ const MANAGER = "manager";
 const PENDING = "pending";
 const PAID = "paid";
 const SHIPPED = "shipped";
+const IN_PORGRESS = "in progress";
 const DELIVERED = "delivered";
 const CANCELLED = "cancelled";
 
-const STATUS = [PENDING, PAID, SHIPPED, DELIVERED, CANCELLED];
+const STATUS = [PENDING, PAID, SHIPPED,IN_PORGRESS, DELIVERED, CANCELLED];
 
 const ROLES = [ADMIN, CUSTOMER, MANAGER];
 

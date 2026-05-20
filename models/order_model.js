@@ -32,7 +32,6 @@ const orderSchema = new mongoose.Schema(
     },
     guestInfo: {
       name: String,
-      email: String,
       phone: {
         type: String,
         validate: {
@@ -43,14 +42,8 @@ const orderSchema = new mongoose.Schema(
         },
         required: [true, "required"],
       },
-      shippingAddress: {
-        type:{
-        country:String,
-        city:String,
-        area:String,
-        street:String,
-        details:String
-    },
+      deliveryAddress: {
+        type:String,
         required:[true,'required address information']
     },
     },
