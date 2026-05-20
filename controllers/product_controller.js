@@ -7,9 +7,9 @@ const Product = require('../models/product_model')
 const Category = require('../models/category_model')
 
 const addProduct = errorCatcher(async(req,res,next)=>{
-    const preview = req.files? req.files['previewImg'][0].filename: null
-    const imgs = req.files? req.files['imgs'].map(file=>file.filename): []
 
+    const preview = req.files && req.files['previewImg'] && req.files['previewImg'][0]? req.files['previewImg'][0].filename: null
+    const imgs = req.files && req.files['imgs']? req.files['imgs'].map(file=>file.filename): []
     const {name} = req.body
     const oldProduct = await Product.findOne({name})
     if(oldProduct){
@@ -17,6 +17,8 @@ const addProduct = errorCatcher(async(req,res,next)=>{
         deleteFiles(imgs)
         return next(AppError.create("fail", 400, { message: "Product already exists" }))
     }
+
+    
     
     const product = await Product.create({...req.body,previewImg:preview,imgs})
     await Category.findByIdAndUpdate(req.body.catId,{$push:{products:product._id}})
