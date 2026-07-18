@@ -21,3 +21,10 @@ git clone https://github.com/username/ecommerce-backend.git
 cd ecommerce-backend
 npm install
 npm run auto
+```
+
+## API Documentation Link  
+Point to Swagger/Postman docs.
+
+## Contributing & License  
+Guidelines for collaboration. 
