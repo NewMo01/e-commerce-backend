@@ -12,6 +12,7 @@ router.route('/')
     .get(controller.getBrands)
     .post(validator.postValidator, controller.createBrand)
 
+
 router.route('/:id')
     .get(validator.getValidator, controller.getBrand)
     .patch(validator.updateValidator, controller.updateBrand)

@@ -10,6 +10,7 @@ router.route('/')
     .get(controller.getSubCategories)
     .post(controller.setCatIdFromParamsToBody, validation.postValidator, controller.createSubCategory)
     
+  
 router.route('/:id')
     .get(validation.getValidator, controller.getSubCategory)
     .patch(validation.updateValidator, controller.updateSubCategory)

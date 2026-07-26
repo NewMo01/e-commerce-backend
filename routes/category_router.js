@@ -7,10 +7,12 @@ const router = express.Router();
 
 router.use('/:catId/subcategories',SubCategoryRouter)
 
+
 router
   .route("/")
   .get(controller.getCategories)
   .post(categoryValidator.postValidator, controller.createCategory);
+
 
 router
   .route("/:id")

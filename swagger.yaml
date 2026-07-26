@@ -1,0 +1,268 @@
+openapi: 3.0.0
+info:
+  title: E-commerce API
+  description: API documentation
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/
+paths:
+  /api/v1/categories:
+    get:
+      summary: "Get all categories"
+      tags:
+        - "Categories"
+      responses:
+        200:
+          description: "List of categories"
+    post:
+      summary: "Create a new category"
+      tags:
+        - "Categories"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        201:
+          description: "Category created successfully"
+
+  /api/v1/categories/{id}:
+    get:
+      summary: "Get a specific category by ID"
+      tags:
+        - "Categories"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Category details"
+        404:
+          description: "Category not found"
+    patch:
+      summary: "Update a category"
+      tags:
+        - "Categories"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        200:
+          description: "Category updated"
+    delete:
+      summary: "Delete a category"
+      tags:
+        - "Categories"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Category deleted"
+
+  /api/v1/subcategories:
+    get:
+      summary: Get all subcategories
+      tags:
+        - Sub Categories
+      responses:
+        200:
+          description: List of subcategories
+    post:
+      summary: Create a new subcategory
+      tags:
+        - Sub Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Laptops"
+                categoryId:
+                  type: string
+                  description: Mongo ObjectId of the parent category
+                  example: "64b1f2a9c1234567890abcd1"
+      responses:
+        201:
+          description: SubCategory created successfully
+
+  /api/v1/subcategories/{id}:
+    get:
+      summary: Get a specific subcategory by ID
+      tags:
+        - Sub Categories
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Category ID
+          schema:
+            type: string
+      responses:
+        200:
+          description: SubCategory details
+        404:
+          description: SubCategory not found
+
+    patch:
+      summary: Update a specific subcategory by ID
+      tags:
+        - Sub Categories
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Subcategory ID (Mongo ObjectId)
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Gaming Laptops"
+                categoryId:
+                  type: string
+                  example: "64b1f2a9c1234567890abcd1"
+      responses:
+        200:
+          description: Subcategory updated successfully
+        404:
+          description: Subcategory not found
+
+    delete:
+      summary: Delete a specific subcategory by ID
+      tags:
+        - Sub Categories
+      parameters:
+        - in: path
+          name: id
+          description: Subcategory ID (Mongo ObjectId)
+          required: true
+          description: Subcategory ID (Mongo ObjectId)
+          schema:
+            type: string
+      responses:
+        200:
+          description: Subcategory deleted successfully
+        404:
+          description: Subcategory not found
+
+  /api/v1/brands:
+    get:
+      summary: Get all brands
+      tags:
+        - Brands
+      responses:
+        200:
+          description: List of brands
+
+    post:
+      summary: Create a new brand
+      tags:
+        - Brands
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Apple"
+      responses:
+        201:
+          description: Brand created successfully
+
+  /api/v1/brands/{id}:
+    get:
+      summary: Get a specific brand by ID
+      tags:
+        - Brands
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Brand ID
+          schema:
+            type: string
+      responses:
+        200:
+          description: Brand details
+        404:
+          description: Brand not found
+
+    patch:
+      summary: Update a brand
+      tags:
+        - Brands
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Samsung"
+
+      responses:
+        200:
+          description: Brand updated
+        404:
+          description: Brand not found
+
+    delete:
+      summary: Delete a brand
+      tags:
+        - Brands
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Brand deleted
+        404:
+          description: Brand not found
