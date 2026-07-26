@@ -1,5 +1,6 @@
 const { check } = require("express-validator");
 const validate = require("../../middlewares/validator_middleware");
+const Category = require('../../models/category_model')
 
 
 
@@ -52,7 +53,15 @@ exports.postValidator = [
     .notEmpty()
     .withMessage("category id is required")
     .isMongoId()
-    .withMessage("invalid category id"),
+    .withMessage("invalid category id")
+    .custom(async v=>{
+      const cat = await Category.findById(v)
+      if(!cat){
+        throw new Error('Category is not found')
+      }
+      return true
+
+    }),
   check("subCategoryId")
     .optional({ values: "falsy" })
     .isMongoId()
