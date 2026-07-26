@@ -1,9 +1,7 @@
 const { check } = require("express-validator");
 const validate = require("../../middlewares/validator_middleware");
 
-// string => required, len
-// no => isfloat, tofloat,  int, toint,  optional, custom
-// array => isarray
+
 
 exports.postValidator = [
   check("title")
@@ -50,7 +48,7 @@ exports.postValidator = [
     .trim()
     .notEmpty()
     .withMessage("preview image can not be empty"),
-  check("categoryId")
+  check("category")
     .notEmpty()
     .withMessage("category id is required")
     .isMongoId()

@@ -19,7 +19,7 @@ exports.getProducts = async function (req, res) {
   const products = await Product.find()
     .skip(skip)
     .limit(limit)
-    .populate("categoryId", "name-_id");
+    .populate("category", "name-_id");
 
   res.status(200).jsend.success({
     result: products.length,
@@ -33,7 +33,7 @@ exports.getProducts = async function (req, res) {
 //@Access Public
 exports.getProduct = async function (req, res) {
   const { id } = req.params;
-  const product = await Product.findById(id).populate("categoryId", "name-_id");
+  const product = await Product.findById(id).populate("category", "name-_id");
 
   res.status(200).jsend.success(product);
 };

@@ -13,7 +13,6 @@ const productSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      required: true,
       lowercase: true,
     },
     description: {
@@ -41,7 +40,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "product preview image can not be empty"],
     },
-    categoryId: {
+    category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       required: [true, "category id is required"],
