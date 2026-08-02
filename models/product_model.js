@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+<<<<<<< HEAD
 const slugify = require("slugify");
 
 const productSchema = new mongoose.Schema(
@@ -61,6 +62,62 @@ const productSchema = new mongoose.Schema(
     ratingsQuantity: {
       type: Number,
       default: 0,
+=======
+
+const productSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "required field"],
+      minlength: [2, "too short name"],
+    },
+    catId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "required field"],
+      ref: "Category",
+    },
+    previewImg: {
+      type: String,
+      default: null,
+    },
+    imgs: {
+      type: [String],
+      default: [],
+    },
+    description: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: [true, "required"],
+      min: 0,
+    },
+    colors: {
+      type: [String],
+      default: [],
+    },
+    sizes: {
+      type: [String],
+      default: [],
+    },
+    stock: {
+      type: Number,
+      required: [true, "required"],
+      validate: [Number.isInteger, "must be integer"],
+      min: 0,
+    },
+    soldCount: {
+    type: Number,
+    default: 0,
+    validate: [Number.isInteger, '{VALUE} is not an integer' ]
+  },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+>>>>>>> 3660d0d81ea19ae5f235d781e6908fd456d15b4b
     },
   },
   {
@@ -74,6 +131,7 @@ const productSchema = new mongoose.Schema(
   },
 );
 
+<<<<<<< HEAD
 productSchema.pre("save", function (next) {
   if (this.isModified("title")) {
     this.slug = slugify(this.title);
@@ -89,5 +147,7 @@ productSchema.pre("findOneAndUpdate", function (next) {
     update.$set.slug = slugify(update.$set.title);
   }
 });
+=======
+>>>>>>> 3660d0d81ea19ae5f235d781e6908fd456d15b4b
 
 module.exports = mongoose.model("Product", productSchema);

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+<<<<<<< HEAD
 const slugify = require("slugify");
 
 const { Schema } = mongoose;
@@ -51,3 +52,31 @@ catSchema.pre('findOneAndUpdate',function(next){
 })
 
 module.exports = mongoose.model("Category", catSchema);
+=======
+
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "required field"],
+      minlength: [2, "too short name"],
+    },
+    image: {
+      type: String,
+      default: null,
+    },
+    products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }]
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.__v;
+        return ret;
+      },
+    },
+  },
+);
+
+module.exports = mongoose.model("Category", categorySchema);
+>>>>>>> 3660d0d81ea19ae5f235d781e6908fd456d15b4b
