@@ -1,9 +1,9 @@
 module.exports = class ApiFeatures {
   #mongoQuery;
-  constructor(model, reqQuery) {
+  constructor(model, reqQuery, anotherFindQuery = {}) {
     this.model = model;
     this.reqQuery = reqQuery;
-    this.#mongoQuery = model.find();
+    this.#mongoQuery = model.find(anotherFindQuery);
   }
 
   filter() {
@@ -53,8 +53,10 @@ module.exports = class ApiFeatures {
   select() {
     const fields = this.reqQuery.fields?.replaceAll(",", " ");
     this.#mongoQuery = this.#mongoQuery.select(fields);
-    return this
+    return this;
   }
 
-  get getQuery(){return this.#mongoQuery}
+  get mongoQuery() {
+    return this.#mongoQuery;
+  }
 };

@@ -1,6 +1,6 @@
 const jsend = require("jsend");
 const SubCategory = require("../models/subcategory_model");
-const pagination = require("../helpers/pagination");
+const ApiFeatures = require("../helpers/features");
 const AppErr = require("../helpers/app_error");
 
 //@Desc   Create new subcategory
@@ -30,8 +30,9 @@ exports.getSubCategories = async function (req, res) {
   if (req.params.catId) {
     filterOb = { categoryId: req.params.catId };
   }
-  const { skip, limit } = pagination(req);
-  const subcats = await SubCategory.find(filterOb).skip(skip).limit(limit);
+  const query = new ApiFeatures(SubCategory, req.query, filterOb).paginate()
+    .getQuery;
+  const subcats = await query;
   res.status(200).jsend.success({
     result: subcats.length,
     page: +req.query.page,

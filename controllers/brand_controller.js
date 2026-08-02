@@ -1,6 +1,6 @@
 const jsend = require("jsend");
 const Brand = require("../models/brand_model");
-const pagination = require("../helpers/pagination");
+const ApiFeatures = require("../helpers/features");
 const Err = require("../helpers/app_error");
 
 //@Desc   create brand
@@ -15,8 +15,8 @@ exports.createBrand = async function (req, res) {
 //@Route  GET api/v1/brands/
 //@Access Public
 exports.getBrands = async function (req, res) {
-  const { skip, limit } = pagination(req);
-  const brands = await Brand.find().skip(skip).limit(limit);
+  const query = new ApiFeatures(Brand, req.query).paginate().getQuery;
+  const brands = await query;
   res
     .status(200)
     .jsend.success({ result: brands.length, page: +req.query.page, brands });
