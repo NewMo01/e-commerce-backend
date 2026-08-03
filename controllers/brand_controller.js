@@ -15,7 +15,10 @@ exports.createBrand = async function (req, res) {
 //@Route  GET api/v1/brands/
 //@Access Public
 exports.getBrands = async function (req, res) {
-  const query = new ApiFeatures(Brand, req.query).paginate().getQuery;
+  const query = new ApiFeatures(Brand, req.query)
+    .paginate()
+    .select().mongoQuery;
+  console.log(query);
   const brands = await query;
   res
     .status(200)
