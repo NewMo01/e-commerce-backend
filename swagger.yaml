@@ -4,7 +4,7 @@ info:
   description: API documentation
   version: 1.0.0
 servers:
-  - url: http://localhost:3000/
+  - url: http://localhost:3000
 paths:
   /api/v1/categories:
     get:
@@ -267,3 +267,185 @@ paths:
         404:
           description: Brand not found
 ##########################
+
+  /api/v1/products:
+    post:
+      summary: Create a new product
+      tags: [Products]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description, quantity, price, previewImg, category]
+              properties:
+                title:
+                  type: string
+                  minLength: 3
+                  maxLength: 100
+                description:
+                  type: string
+                  minLength: 20
+                quantity:
+                  type: integer
+                sold:
+                  type: integer
+                  default: 0
+                price:
+                  type: number
+                discountPrice:
+                  type: number
+                  description: Must be lower than price
+                colors:
+                  type: array
+                  items: { type: string }
+                images:
+                  type: array
+                  items: { type: string }
+                previewImg:
+                  type: string
+                category:
+                  type: string
+                  format: objectId
+                subCategoryId:
+                  type: string
+                  format: objectId
+                brandId:
+                  type: string
+                  format: objectId
+                ratingsAvg:
+                  type: number
+                  minimum: 1
+                  maximum: 5
+                ratingsQuantity:
+                  type: integer
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    get:
+      summary: Get all products
+      tags: [Products]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema: { type: integer, default: 10 }
+          description: Number of items per page
+        - in: query
+          name: sort
+          schema: { type: string }
+          description: Sort by fields, e.g. `price,-title`
+        - in: query
+          name: search
+          schema: { type: string }
+          description: Search keyword for product title/description
+        - in: query
+          name: filter
+          schema: { type: string }
+          description: Filter conditions, e.g. `price[gte]=100&price[lte]=500`
+        - in: query
+          name: fields
+          schema: { type: string }
+          description: Select specific fields, e.g. `title,price,category`
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: integer
+                  page:
+                    type: integer
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+
+  /api/v1/products/{id}:
+    get:
+      summary: Get a specific product
+      tags: [Products]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: objectId }
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              example:
+                status: "success"
+                data:
+                  id: "64b1f2a9c1234567890abcd1"
+                  title: "Wireless Headphones"
+                  description: "High-quality Bluetooth headphones with noise cancellation."
+                  quantity: 50
+                  sold: 10
+                  price: 120.00
+                  discountPrice: 99.99
+                  colors: ["black", "white"]
+                  images: ["img1.jpg", "img2.jpg"]
+                  previewImg: "preview.jpg"
+                  category: "64b1f2a9c1234567890abcd2"
+                  subCategoryId: "64b1f2a9c1234567890abcd3"
+                  brandId: "64b1f2a9c1234567890abcd4"
+                  ratingsAvg: 4.5
+                  ratingsQuantity: 120
+
+    patch:
+      summary: Update a product
+      tags: [Products]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: objectId }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              title: "Wireless Headphones Pro"
+              description: "Updated description with improved noise cancellation."
+              price: 150.00
+              discountPrice: 129.99
+              quantity: 40
+              colors: ["black", "blue"]
+              previewImg: "updated-preview.jpg"
+              category: "64b1f2a9c1234567890abcd2"
+              brandId: "64b1f2a9c1234567890abcd4"
+
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              example:
+                status: "success"
+                data: "Done"
+
+    delete:
+      summary: Delete a product
+      tags: [Products]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: objectId }
+      responses:
+        '200':
+          description: Product deleted successfully
+
