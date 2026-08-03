@@ -30,8 +30,10 @@ exports.getSubCategories = async function (req, res) {
   if (req.params.catId) {
     filterOb = { categoryId: req.params.catId };
   }
-  const query = new ApiFeatures(SubCategory, req.query, filterOb).paginate()
-    .getQuery;
+  const query = new ApiFeatures(SubCategory, req.query, filterOb)
+    .sort()
+    .paginate()
+    .select().mongoQuery;
   const subcats = await query;
   res.status(200).jsend.success({
     result: subcats.length,

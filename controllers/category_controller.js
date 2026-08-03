@@ -17,8 +17,12 @@ exports.createCategory = async (req, res) => {
 // @Route   GET api/v1/categories/
 // @Access  Public
 exports.getCategories = async (req, res) => {
-  const query = new ApiFeatures(Category, req.query).paginate().mongoQuery;
+  const query = new ApiFeatures(Category, req.query)
+    .paginate()
+    .select().mongoQuery;
+
   const categories = await query;
+  
   res.status(200).jsend.success({
     result: categories.length,
     page: +req.query.page,
