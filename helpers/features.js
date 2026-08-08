@@ -1,7 +1,6 @@
 module.exports = class ApiFeatures {
   #mongoQuery;
   constructor(model, reqQuery, anotherFindQuery = {}) {
-    this.model = model;
     this.reqQuery = reqQuery;
     this.#mongoQuery = model.find(anotherFindQuery);
   }
@@ -42,9 +41,9 @@ module.exports = class ApiFeatures {
     return this;
   }
 
-  paginate() {
-    const limit = +this.reqQuery.limit || 10;
-    const page = +this.reqQuery.page || 1;
+  paginate(l = 10, p = 1) {
+    const limit = +this.reqQuery.limit || l;
+    const page = +this.reqQuery.page || p;
     const skip = (page - 1) * limit;
 
     this.#mongoQuery = this.#mongoQuery.skip(skip).limit(limit);
