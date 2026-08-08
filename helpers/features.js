@@ -29,8 +29,9 @@ module.exports = class ApiFeatures {
         { title: { $regex: this.reqQuery.keyword, $options: "i" } },
         { description: { $regex: this.reqQuery.keyword, $options: "i" } },
       ];
+      this.#mongoQuery = this.#mongoQuery.find(query);
     }
-    this.#mongoQuery = this.#mongoQuery.find(query);
+    
     return this;
   }
 
