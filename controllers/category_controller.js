@@ -18,11 +18,13 @@ exports.createCategory = async (req, res) => {
 // @Access  Public
 exports.getCategories = async (req, res) => {
   const query = new ApiFeatures(Category, req.query)
+    .filter()
+    .sort()
     .paginate()
     .select().mongoQuery;
 
   const categories = await query;
-  
+
   res.status(200).jsend.success({
     result: categories.length,
     page: +req.query.page,

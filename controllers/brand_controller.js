@@ -16,6 +16,8 @@ exports.createBrand = async function (req, res) {
 //@Access Public
 exports.getBrands = async function (req, res) {
   const query = new ApiFeatures(Brand, req.query)
+    .filter()
+    .sort()
     .paginate()
     .select().mongoQuery;
   console.log(query);
