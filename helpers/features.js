@@ -21,16 +21,19 @@ module.exports = class ApiFeatures {
     return this;
   }
 
-  search() {
+  search(isProduct = false) {
     const query = {};
     if (this.reqQuery.keyword) {
-      query.$or = [
-        { title: { $regex: this.reqQuery.keyword, $options: "i" } },
-        { description: { $regex: this.reqQuery.keyword, $options: "i" } },
-      ];
+      isProduct
+        ? (query.$or = [
+            { title: { $regex: this.reqQuery.keyword, $options: "i" } },
+            { description: { $regex: this.reqQuery.keyword, $options: "i" } },
+          ])
+        : (query.name = { $regex: this.reqQuery.keyword, $options: "i" });
+
       this.#mongoQuery = this.#mongoQuery.find(query);
     }
-    
+
     return this;
   }
 

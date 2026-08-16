@@ -1,77 +1,46 @@
-const jsend = require("jsend");
 const SubCategory = require("../models/subcategory_model");
-const ApiFeatures = require("../helpers/features");
-const AppErr = require("../helpers/app_error");
+const handlerFactory = require("../helpers/handler_factory");
 
-//@Desc   Create new subcategory
-//@Route  POST  api/v1/subcategories
-//@Access Private
-
+//take id from params => category id in body
+// req.body.categoryId = req.params.catId
 exports.setCatIdFromParamsToBody = function (req, res, next) {
   if (req.params.catId) {
     req.body.categoryId = req.params.catId;
   }
   next();
 };
-//take id from params => category id in body
-// req.body.categoryId = req.params.catId
 
-exports.createSubCategory = async function (req, res) {
-  const subcat = await SubCategory.create(req.body);
-  res.status(201).jsend.success(subcat);
+//@Desc   Create new subcategory
+//@Route  POST  api/v1/subcategories
+//@Access Private
+exports.createSubCategory = handlerFactory.createHandler(SubCategory);
+
+
+// nested route, filter sub categories with category id
+exports.createFilterObject = function (req, res, next) {
+  if (req.params.catId) {
+    req.filterOb = { categoryId: req.params.catId };
+  }
+  next();
 };
 
 //@Desc   get list of subcategory
 //@Route  GET api/v1/subcategories
 //@Access Public
-exports.getSubCategories = async function (req, res) {
-  // nested route, get all sub categories for specific category
-  let filterOb = {};
-  if (req.params.catId) {
-    filterOb = { categoryId: req.params.catId };
-  }
-  const query = new ApiFeatures(SubCategory, req.query, filterOb)
-    .sort()
-    .paginate()
-    .select().mongoQuery;
-  const subcats = await query;
-  res.status(200).jsend.success({
-    result: subcats.length,
-    page: +req.query.page,
-    subcategories: subcats,
-  });
-};
+exports.getSubCategories = handlerFactory.getAllHandler(SubCategory);
 
 //@Desc   get specific subcategory
 //@Route  GET api/v1/subcategories/id
 //@Access Public
-exports.getSubCategory = async function (req, res) {
-  const { id } = req.params;
-  const subcat = await SubCategory.findById(id);
-  res.status(200).jsend.success(subcat);
-};
+exports.getSubCategory = handlerFactory.getOneHandler(SubCategory);
 
 //@Desc   update specific subcategory
 //@Route  PATCH api/v1/subcategories/id
 //@Access Private
-exports.updateSubCategory = async function (req, res) {
-  const { id } = req.params;
-  const subcat = await SubCategory.findByIdAndUpdate(id, {
-    $set: { ...req.body },
-  });
-  if (!subcat) {
-    return next(AppErr.create("subcategory not found", 404));
-  }
-  res.status(200).jsend.success("Done");
-};
+exports.updateSubCategory = handlerFactory.updateHandler(SubCategory);
 
 //@Desc   delete subcategory
 //@Route  DELETE api/v1/subcategories/id
 //@Access Private
-exports.deleteSubCategory = async function (req, res) {
-  const subcat = await SubCategory.findByIdAndDelete(req.params.id);
-  if (!subcat) {
-    return next(AppErr.create("subcategory not found", 404));
-  }
-  res.status(200).jsend.success("Done");
-};
+exports.deleteSubCategory = handlerFactory.deleteHandler(SubCategory);
+

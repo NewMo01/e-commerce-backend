@@ -1,70 +1,28 @@
-const jsend = require("jsend");
-const Err = require("../helpers/app_error");
-const ApiFeatures = require("../helpers/features");
 const Product = require("../models/product_model");
+const handlerFactory = require("../helpers/handler_factory");
 
 //@Desc   create new product
 //@Route  POST /api/v1/products/
 //@Access Private
-exports.createProduct = async function (req, res) {
-  const product = await Product.create(req.body);
-  res.status(201).jsend.success(product);
-};
+exports.createProduct = handlerFactory.createHandler(Product);
 
 //@Desc   get all productS
 //@Route  GET /api/v1/products/
 //@Access Public
-exports.getProducts = async function (req, res) {
-  const query = new ApiFeatures(Product, req.query)
-    .filter()
-    .search()
-    .sort()
-    .paginate()
-    .select()
-    .mongoQuery.populate("category", "name-_id");
-
-  const products = await query;
-
-  res.status(200).jsend.success({
-    result: products.length,
-    page: +req.query.page,
-    products,
-  });
-};
+exports.getProducts = handlerFactory.getAllHandler(Product, true);
 
 //@Desc   get specific product
 //@Route  GET /api/v1/products/:id
 //@Access Public
-exports.getProduct = async function (req, res) {
-  const { id } = req.params;
-  const product = await Product.findById(id).populate("category", "name-_id");
-
-  res.status(200).jsend.success(product);
-};
+exports.getProduct = handlerFactory.getOneHandler(Product);
 
 //@Desc   update specific product
 //@Route  PATCH /api/v1/products/:id
 //@Access Private
-exports.updateProduct = async function (req, res, next) {
-  const { id } = req.params;
-  const product = await Product.findByIdAndUpdate(id, { $set: req.body });
+exports.updateProduct = handlerFactory.updateHandler(Product);
 
-  if (!product) {
-    return next(Err.create("product not found", 404));
-  }
-
-  res.status(200).jsend.success("Done");
-};
 
 //@Desc   delete specific product
 //@Route  DELETE /api/v1/products/:id
 //@Access Private
-exports.deleteProduct = async function (req, res) {
-  const { id } = req.params;
-  const product = await Product.findByIdAndDelete(id);
-  if (!product) {
-    return next(Err.create("product not found", 404));
-  }
-
-  res.status(200).jsend.success("Done");
-};
+exports.deleteProduct = handlerFactory.deleteHandler(Product);
