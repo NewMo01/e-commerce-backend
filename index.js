@@ -9,6 +9,7 @@ const categoryRouter = require("./routes/category_router");
 const subCategoryRouter = require("./routes/subcategory_router");
 const brandRouter = require("./routes/brand_router");
 const productRouter = require("./routes/product_router");
+const authRouter = require("./routes/auth_router");
 
 connectDB();
 
@@ -26,6 +27,7 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/subcategories", subCategoryRouter);
 app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/products", productRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.all(/.*/, (req, res) => {
   res.status(404).jsend.error("resource not found");
