@@ -26,3 +26,4 @@ exports.updateProduct = handlerFactory.updateHandler(Product);
 //@Route  DELETE /api/v1/products/:id
 //@Access Private
 exports.deleteProduct = handlerFactory.deleteHandler(Product);
+

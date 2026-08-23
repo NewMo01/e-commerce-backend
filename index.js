@@ -1,6 +1,7 @@
 require("dotenv").config();
 const connectDB = require("./config/database");
 const jsend = require("jsend");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
@@ -18,6 +19,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(jsend.middleware);
+app.use(cookieParser());
 
 // API Docs
 const swaggerDocument = YAML.load("./swagger.yaml");
@@ -33,7 +35,7 @@ app.all(/.*/, (req, res) => {
   res.status(404).jsend.error("resource not found");
 });
 
-app.use((err, req, res, next) => {
+app.use((err,req, res,next) => {
   if (err.fail) {
     return res.status(err.code || 500).jsend.fail(err.message);
   }

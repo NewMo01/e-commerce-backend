@@ -1,6 +1,5 @@
 {
   "name": "commerce",
-
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,16 +11,19 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@upstash/redis": "^1.38.2",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
     "jsend": "^1.1.0",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.4",
     "slugify": "^1.6.9",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
-
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
