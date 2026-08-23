@@ -6,6 +6,62 @@ info:
 servers:
   - url: http://localhost:3000
 paths:
+  /api/v1/auth/signup:
+    post:
+      summary: User signup
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "201":
+          description: User created successfully
+
+  /api/v1/auth/login:
+    post:
+      summary: User login
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful, returns access and refresh tokens
+
+  /api/v1/auth/logout:
+    post:
+      summary: User logout
+      tags: [Auth]
+      responses:
+        "204":
+          description: Logged out successfully (no content)
+
+  /api/v1/auth/refresh:
+    post:
+      summary: Refresh access token
+      tags: [Auth]
+      responses:
+        "200":
+          description: Returns new access token
+
   /api/v1/categories:
     get:
       summary: "Get all categories"
@@ -170,7 +226,6 @@ paths:
           name: id
           description: Subcategory ID (Mongo ObjectId)
           required: true
-          description: Subcategory ID (Mongo ObjectId)
           schema:
             type: string
       responses:
@@ -178,6 +233,40 @@ paths:
           description: Subcategory deleted successfully
         404:
           description: Subcategory not found
+  /api/v1/categories/{categoryId}/subcategories:
+    get:
+      summary: Get subcategories for a category
+      tags: [Sub Categories]
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of subcategories
+    post:
+      summary: Create a subcategory under a category
+      tags: [Sub Categories]
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "201":
+          description: Subcategory created
 
   /api/v1/brands:
     get:
@@ -266,7 +355,6 @@ paths:
           description: Brand deleted
         404:
           description: Brand not found
-##########################
 
   /api/v1/products:
     post:
@@ -278,7 +366,8 @@ paths:
           application/json:
             schema:
               type: object
-              required: [title, description, quantity, price, previewImg, category]
+              required:
+                [title, description, quantity, price, previewImg, category]
               properties:
                 title:
                   type: string
@@ -321,12 +410,12 @@ paths:
                 ratingsQuantity:
                   type: integer
       responses:
-        '201':
+        "201":
           description: Product created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: "#/components/schemas/Product"
     get:
       summary: Get all products
       tags: [Products]
@@ -356,7 +445,7 @@ paths:
           schema: { type: string }
           description: Select specific fields, e.g. `title,price,category`
       responses:
-        '200':
+        "200":
           description: List of products
           content:
             application/json:
@@ -370,7 +459,7 @@ paths:
                   products:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Product'
+                      $ref: "#/components/schemas/Product"
 
   /api/v1/products/{id}:
     get:
@@ -382,7 +471,7 @@ paths:
           required: true
           schema: { type: string, format: objectId }
       responses:
-        '200':
+        "200":
           description: Product details
           content:
             application/json:
@@ -429,7 +518,7 @@ paths:
               brandId: "64b1f2a9c1234567890abcd4"
 
       responses:
-        '200':
+        "200":
           description: Product updated successfully
           content:
             application/json:
@@ -446,6 +535,41 @@ paths:
           required: true
           schema: { type: string, format: objectId }
       responses:
-        '200':
+        "200":
           description: Product deleted successfully
-
+  /api/v1/categories/{categoryId}/products:
+    get:
+      summary: Get products under a category
+      tags: [Products]
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of products
+    post:
+      summary: Create a product under a category
+      tags: [Products]
+      parameters:
+        - in: path
+          name: subcategoryId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        "201":
+          description: Product created
