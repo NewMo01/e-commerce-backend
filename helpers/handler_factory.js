@@ -20,9 +20,9 @@ exports.getOneHandler = (model) => async (req, res) => {
 exports.getAllHandler =
   (model, isProduct = false) =>
   async (req, res) => {
-    const subCatFilterOb = req.filterOb || {};
+    const filterOb = req.filterOb || {};
 
-    let query = new ApiFeatures(model, req.query, subCatFilterOb)
+    let query = new ApiFeatures(model, req.query, filterOb)
       .filter()
       .search(isProduct)
       .sort()

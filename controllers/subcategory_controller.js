@@ -1,7 +1,7 @@
 const SubCategory = require("../models/subcategory_model");
 const handlerFactory = require("../helpers/handler_factory");
 
-//take id from params => category id in body
+//take id from params => category  in body
 // req.body.categoryId = req.params.catId
 exports.setCatIdFromParamsToBody = function (req, res, next) {
   if (req.params.catId) {
