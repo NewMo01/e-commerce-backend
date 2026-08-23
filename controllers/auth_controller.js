@@ -10,7 +10,7 @@ function generateTokens(user) {
   const accessToken = jwt.sign(
     {
       id: user._id,
-      email: user.email,
+      role: user.role,
     },
     process.env.SECRET_KEY,
     {
@@ -20,7 +20,7 @@ function generateTokens(user) {
   const refreshToken = jwt.sign(
     {
       id: user._id,
-      email: user.email,
+      role: user.role,
     },
     process.env.SECRET_KEY,
     {
@@ -103,7 +103,7 @@ exports.logout = errHandler(async function (req, res, next) {
 
 // this will refresh the access token
 exports.updateAccessToken = errHandler(async function (req, res, next) {
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.cookies.refresh_token;
   if (!refreshToken) {
     return next(MyError.create("No refresh token provided", 404, true));
   }
@@ -115,7 +115,7 @@ exports.updateAccessToken = errHandler(async function (req, res, next) {
   }
 
   const accessToken = jwt.sign(
-    { id: decoded.id, email: decoded.email },
+    { id: decoded.id, role: decoded.role },
     process.env.SECRET_KEY,
     { expiresIn: "15m" },
   );
@@ -127,5 +127,5 @@ exports.updateAccessToken = errHandler(async function (req, res, next) {
     maxAge: 15 * 60 * 1000,
   });
 
-  res.status(200).jsend.success("Token refreshed successfully");
+  res.status(200).jsend.success({ newToken: accessToken });
 });
