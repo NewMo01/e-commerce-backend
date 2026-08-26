@@ -1,7 +1,7 @@
 const vaildate = require("../../middlewares/validator_middleware");
 const { check } = require("express-validator");
 
-exports.idVaildator = [
+exports.idValidator = [
   check("productId")
     .notEmpty()
     .withMessage("product is required")
@@ -11,7 +11,7 @@ exports.idVaildator = [
 ];
 
 exports.updateCartItem = [
-    this.idVaildator,
+    this.idValidator,
   check("quantity")
     .notEmpty()
     .withMessage("quantity is required")

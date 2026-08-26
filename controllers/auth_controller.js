@@ -12,7 +12,7 @@ function generateTokens(user) {
       id: user._id,
       role: user.role,
     },
-    process.env.SECRET_KEY,
+    process.env.ACCESS_SECRET_KEY,
     {
       expiresIn: "15m",
     },
@@ -22,7 +22,7 @@ function generateTokens(user) {
       id: user._id,
       role: user.role,
     },
-    process.env.SECRET_KEY,
+    process.env.REFRESH_SECRET_KEY,
     {
       expiresIn: "7d",
     },
@@ -91,7 +91,7 @@ exports.login = errHandler(async function (req, res, next) {
 exports.logout = errHandler(async function (req, res, next) {
   const refreshToken = req.cookies.refreshToken;
   if (refreshToken) {
-    const decoded = jwt.verify(refreshToken, process.env.SECRET_KEY);
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
     await redis.del(`refresh_token:${decoded.id}`);
   }
 
@@ -107,7 +107,7 @@ exports.updateAccessToken = errHandler(async function (req, res, next) {
   if (!refreshToken) {
     return next(MyError.create("No refresh token provided", 404, true));
   }
-  const decoded = jwt.verify(refreshToken, process.env.SECRET_KEY);
+  const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
   const dbRefreshToken = await redis.get(`refresh_token:${decoded.id}`);
 
   if (refreshToken !== dbRefreshToken) {
@@ -116,7 +116,7 @@ exports.updateAccessToken = errHandler(async function (req, res, next) {
 
   const accessToken = jwt.sign(
     { id: decoded.id, role: decoded.role },
-    process.env.SECRET_KEY,
+    process.env.ACCESS_SECRET_KEY,
     { expiresIn: "15m" },
   );
 
