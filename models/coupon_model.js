@@ -22,7 +22,16 @@ const couponSchema = new mongoose.Schema(
       ref: "User",
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.__v;
+        delete ret.updatedAt;
+        return ret;
+      },
+    },
+  },
 );
 
 module.exports = mongoose.model("Coupon", couponSchema);

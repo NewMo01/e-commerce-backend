@@ -5,7 +5,7 @@ const User = require("../models/user_model");
 module.exports = async function (req, res, next) {
   const token = req.cookies.access_token;
   if (!token) {
-    return next(Err.create("unauthorized - no token provided", 401, true));
+    return next(Err.create("unauthanticated - no token provided", 401, true));
   }
   const decoded = jwt.verify(
     token,
