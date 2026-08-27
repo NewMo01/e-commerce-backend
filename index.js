@@ -22,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 app.use(jsend.middleware);
 app.use(cookieParser());
+app.set("query parser", "extended");
 
 // API Docs
 const swaggerDocument = YAML.load("./swagger.yaml");
@@ -42,6 +43,12 @@ app.all(/.*/, (req, res) => {
 app.use((err, req, res, next) => {
   if (err.fail) {
     return res.status(err.code || 500).jsend.fail(err.message);
+  }
+  if (err.name === "TokenExpiredError") {
+    return res.status(401).json({ error: "Refresh token expired" });
+  }
+  if (err.name === "JsonWebTokenError") {
+    return res.status(401).json({ error: "Invalid refresh token" });
   }
   res.status(err.code || 500).jsend.error(err.message);
 });

@@ -127,5 +127,5 @@ exports.updateAccessToken = errHandler(async function (req, res, next) {
     maxAge: 15 * 60 * 1000,
   });
 
-  res.status(200).jsend.success({ newToken: accessToken });
+  res.status(200).jsend.success("Access token refreshed successfully!!");
 });

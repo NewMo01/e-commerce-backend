@@ -18,7 +18,6 @@ const couponSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "userid is required"],
-      unique: true,
       ref: "User",
     },
   },

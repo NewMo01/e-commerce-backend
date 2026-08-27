@@ -5,11 +5,12 @@ const Coupon = require("../models/coupon_model");
 exports.createCoupon = async function (req, res) {
   const coupon = await Coupon.create(req.body);
   res.status(201).jsend.success(coupon);
-}
+};
 
 exports.getCoupon = async function (req, res) {};
 
 exports.getListOfCoupons = async function (req, res) {
+    console.log(req.query);
   const coupons = await new AppFeatures(Coupon, req.query)
     .filter()
     .sort()
