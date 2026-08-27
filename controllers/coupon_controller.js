@@ -1,12 +1,11 @@
 const jsend = require("jsend");
 const AppFeatures = require("../helpers/features");
-const errHandler = require('../helpers/err_handler')
 const Coupon = require("../models/coupon_model");
 
-exports.createCoupon = errHandler(async function (req, res) {
+exports.createCoupon = async function (req, res) {
   const coupon = await Coupon.create(req.body);
   res.status(201).jsend.success(coupon);
-})
+}
 
 exports.getCoupon = async function (req, res) {};
 
