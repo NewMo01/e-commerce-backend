@@ -9,7 +9,7 @@ module.exports = async function (req, res, next) {
   }
   const decoded = jwt.verify(
     token,
-    process.env.ACCESS_ACCESS_ACCESS_SECRET_KEY,
+    process.env.ACCESS_SECRET_KEY,
   );
 
   if (!decoded) {

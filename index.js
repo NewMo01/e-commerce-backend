@@ -12,6 +12,7 @@ const brandRouter = require("./routes/brand_router");
 const productRouter = require("./routes/product_router");
 const authRouter = require("./routes/auth_router");
 const cartRouter = require("./routes/cart_router");
+const couponRouter = require("./routes/coupon_router");
 
 connectDB();
 
@@ -32,6 +33,7 @@ app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/cart", cartRouter);
+app.use("/api/v1/coupons", couponRouter);
 
 app.all(/.*/, (req, res) => {
   res.status(404).jsend.error("resource not found");
