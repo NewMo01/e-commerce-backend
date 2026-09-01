@@ -17,15 +17,15 @@ exports.getCoupon = async function (req, res, next) {
     case !coupon:
       return next(Err.create("coupon not found", 404, true));
 
-    case req.user.id !== coupon.userId.toString():
-      return next(Err.create("coupon not available for that user", 400, true));
-
     case !coupon.isActive:
       return next(Err.create("coupon is not active", 400, true));
 
-    case coupon.expireDate <= Date.now():
-        coupon.isActive = false;
-        await coupon.save();
+    case req.user.id !== coupon.userId.toString():
+      return next(Err.create("coupon not available for that user", 400, true));
+
+    case coupon.expireDate <= new Date():
+      coupon.isActive = false;
+      await coupon.save();
       return next(Err.create("coupon is expired", 400, true));
   }
 
@@ -40,7 +40,7 @@ exports.getListOfCoupons = async function (req, res) {
   res.status(200).jsend.success(coupons);
 };
 
-exports.deleteCoupon = async function (req, res,next) {
+exports.deleteCoupon = async function (req, res, next) {
   const { code } = req.params;
   const coupon = await Coupon.findOneAndDelete({ code });
   if (!coupon) {

@@ -1,67 +1,46 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
-const constants = require('../helpers/constants')
 
 const orderSchema = new mongoose.Schema(
   {
-    items: {
-      type: [
-        {
-          productId: { type: mongoose.Schema.Types.ObjectId, required: true },
-          quantity: { type: Number, required: true },
-          color: String,
-          size: String,
-          purchasePrice: { type: Number, required: true },
-        },
-      ],
-      required: [true, "required"],
-    },
-    total: {
-      type: Number,
-      required: [true, "required"],
-    },
-    status: {
-      type: String,
-      enum: constants.STATUS,
-      default: constants.PENDING,
-    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: false, // optional, null for guest checkout
+      required: [true, "user id is required"],
     },
-    guestInfo: {
-      name: String,
-      phone: {
-        type: String,
-        validate: {
-          validator: function (v) {
-            return validator.isMobilePhone(v, "ar-EG");
+    products: {
+      type: [
+        {
+          productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            required: [true, "product id is required"],
           },
-          message: "invalid phone number",
+          quantity: {
+            type: Number,
+            min: [1, "quantity must be at least 1"],
+            required: [true, "product quantity is required"],
+          },
+          price: {
+            type: Number,
+            min: 0,
+            required: [true, "product price is required"],
+          },
         },
-        required: [true, "required"],
-      },
-      deliveryAddress: {
-        type:String,
-        required:[true,'required address information']
+      ],
+      required: [true, "products are required"],
     },
+    totalAmount: {
+      type: Number,
+      required: [true, "total amount is required"],
+      min: 0,
     },
-    paymentInfo: {
+    stripeSessionId: {
       type: String,
-      enum: ["card", "paypal", "cash"],
-      default: "cash",
+      required: [true, "stripe session id is required"],
+      unique: [true, "stripe session id must be unique"],
     },
   },
-  {
-    timestamps: true,
-    toJSON: {
-      transform: (doc, ret) => {
-        delete ret.__v;
-        return ret;
-      },
-    },
-  },
+  {timestamps: true},
 );
 
 module.exports = mongoose.model("Order", orderSchema);
