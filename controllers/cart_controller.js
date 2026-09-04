@@ -5,7 +5,7 @@ const Product = require("../models/product_model");
 exports.getCartItems = async function (req, res) {
   const ids = req.user.cartItems.map((item) => item.productId);
   const products = await Product.find({ _id: { $in: ids } }).select(
-    "title description price previewImg sold _id",
+    "title description price previewImg _id",
   );
 
   const resItems = products.map( (product) => {

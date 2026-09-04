@@ -1,10 +1,17 @@
+const express = require("express");
+const controller = require("../controllers/payment_controller");
+const authenticated = require("../middlewares/authentication_middleware");
+const validator = require("../helpers/validation_layer/payment_validator");
 
-const express = require('express');
-const controller = require('../controllers/payment_controller');
+const router = express.Router();
 
-const router = express.Router()
+router.use(authenticated);
 
-router.post('/create-checkout-session', controller.createCheckoutSession);
-router.post('/checkout-success', controller.checkoutSuccess);
+router.post(
+  "/create-checkout-session",
+  validator.createCheckoutSessionValidator,
+  controller.createCheckoutSession,
+);
+router.post("/checkout-success", controller.checkoutSuccess);
 
-module.exports = router
+module.exports = router;

@@ -8,7 +8,7 @@ const {
 } = require("../helpers/validation_layer/cart_validator");
 const router = express.Router();
 
-router.use(authenticated, authorized("customer"));
+router.use(authenticated);
 router.use("/:productId", idValidator);
 
 router
