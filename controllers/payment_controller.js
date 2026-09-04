@@ -1,7 +1,7 @@
 const jsend = require("jsend");
 const Err = require("../helpers/app_error");
 const stripe = require("../config/stripe");
-const Coupon = require("../models/coupon_model");
+const Order = require("../models/order_model");
 
 exports.createCheckoutSession = async (req, res, next) => {
   //products -> [{title description price previewImg _id quantity}]
@@ -62,7 +62,27 @@ exports.createCheckoutSession = async (req, res, next) => {
   });
 };
 
-exports.checkoutSuccess = async (req, res) => {};
+exports.checkoutSuccess = async (req, res, next) => {
+  const { sessionId } = req.body;
+  if (!sessionId) {
+    return next(Err.create("sessionId is required", 400, true));
+  }
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  const { amount_total, metadata } = session;
+  let products = JSON.parse(metadata.products);
+  products = products.map((p) => {
+    return { productId: p.id, ...p };
+  });
+
+  const order = await Order.create({
+    userId: metadata.userId,
+    products,
+    totalAmount: amount_total / 100,
+    stripeSessionId: sessionId,
+  });
+
+  res.status(201).jsend.success(order);
+};
 
 async function createCoupon(amount) {
   const c = await stripe.coupons.create({

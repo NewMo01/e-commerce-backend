@@ -40,7 +40,15 @@ const orderSchema = new mongoose.Schema(
       unique: [true, "stripe session id must be unique"],
     },
   },
-  {timestamps: true},
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.__v;
+        return ret;
+      },
+    },
+  },
 );
 
 module.exports = mongoose.model("Order", orderSchema);
