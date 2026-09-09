@@ -2,7 +2,7 @@
 
 ## Overview
 A production-ready backend for an e-commerce platform built with Node.js and Express.  
-Features include category, subcategory, brand management, authentication, cart, and coupon handling.
+Features include category, subcategory, brand management, authentication, cart, coupon handling, and Stripe payment processing.
 
 ## Features
 - Category & Subcategory CRUD
@@ -12,6 +12,7 @@ Features include category, subcategory, brand management, authentication, cart, 
 - Refresh token storage in Redis
 - Cart management (add, update, remove items)
 - Coupon system (validation, expiration, usage limits)
+- Stripe payment integration (Checkout sessions & success verification)
 
 ## Tech Stack
 - Node.js
@@ -19,6 +20,14 @@ Features include category, subcategory, brand management, authentication, cart, 
 - MongoDB
 - Mongoose
 - Redis (for refresh tokens and caching)
+- Stripe API
+
+## Environment Variables
+Ensure the following variables are set in your `.env` file:
+```env
+STRIPE_SECRET_KEY=your_stripe_secret_key
+```
+
 
 ## Installation
 ```bash
@@ -33,4 +42,3 @@ npm run auto
 
 ## Contributing & License  
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
